@@ -15,3 +15,22 @@ export const userPost = async (req, res) => {
         usuario
     });
 }
+
+export const userPut = async(req , res) => {
+    const {id} = req.params;
+    const {_id,password,...resto} = req.body;
+
+    if (password) {
+        const salto = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync(password, salto);
+    }
+
+    await User.findByIdAndUpdate(id, resto);
+
+    const usuario = await User.findOne({_id: id});
+
+    res.status(200).json({
+        msg: "Usuario actualizado",
+        usuario
+    })
+}
